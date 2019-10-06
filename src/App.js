@@ -9,7 +9,9 @@ class App extends Component{
       size: 0,
       pageNumber: 1,
       urlList: [],
-      loader:false
+      loader:false,
+      repoName: [],
+      repoUrl: []
     };
   }
 
@@ -32,7 +34,7 @@ class App extends Component{
         let tempArr=[]  
         //Storing the URLs from the API into tempArr[].
         for (var i = 0; i < response.items.length; i++) {
-          tempArr.push(response.items[i].url+"\n")
+          tempArr.push(response.items[i].html_url+"\n")
         }
         //Storing total number of entries into totalCount.
         var totalCount=response.items.length
@@ -70,22 +72,17 @@ class App extends Component{
 
   stringSlice = (tempArr,totalCount) => {
     const urls=[]
+    const repo=[]
     for (const [index, value] of tempArr.entries()){
-      //Converting undefined data into string.
-      var url0=JSON.stringify({value})
-      var url1=String(url0)
-      //Removing junk values from url.
-      var url2=url1.replace('{"value":"','')
-      var url3=url2.replace('n"}','')
-      var url4=url3.replace('api.','www.')
-      var final_url=url4.replace('/repos','')
-      //Storing valid url into urls[].
-      urls.push(<div class="card"><p key={index}><a href={final_url}>{index+1}. {final_url}</a></p></div>)
-      urls.sort()
+      urls.push(value)
+      let urlSplit=value.replace(/https:\/\/github.com\/|\/issues\/[0-9]+/g,'')
+      var repName=urlSplit.split("/")
+      repo.push(<div class="card"><p key={index}><a href={value}>{index+1}. {repName[1]}</a></p></div>)
     }
     this.setState({
       urlList: urls,
-      size: totalCount
+      size: totalCount,
+      repoName: repo
     })
   }
 
@@ -99,7 +96,7 @@ class App extends Component{
           {this.state.loader ?
             <Loader loader={this.state.loader}/>
             :
-            this.state.urlList
+            this.state.repoName
           }
           {this.state.pageNumber>1 && <button onClick={this.previousPage}>Previous Page</button>}
           {!this.state.loader?
