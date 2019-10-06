@@ -45,7 +45,7 @@ class App extends Component{
           ...this.state,
           loader:false
         })
-        if(this.state.total_count != total_count){
+        if(this.state.total_count !== total_count){
           this.setState({
             total_count: total_count
           });
