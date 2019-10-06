@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './App.css';
+import Loader from './loader/loader'
 
 class App extends Component{
   constructor() {
@@ -8,6 +9,7 @@ class App extends Component{
       size: 0,
       pageNumber: 1,
       urlList: [],
+      loader:false,
       repoName: [],
       repoUrl: [],
       total_count: 0
@@ -20,6 +22,10 @@ class App extends Component{
 
   callPage = (pageNo,perPage) => {
     //Fetching data from the API.
+    this.setState({
+      ...this.state,
+      loader:true
+    })
     fetch(`https://api.github.com/search/issues?page=${pageNo}&per_page=${perPage}&q=author:hacktoberfest-team`)
       .then(response => {
         return response.json();
@@ -35,6 +41,10 @@ class App extends Component{
         var totalCount=response.items.length
         //Calling stringSlice function to remove junk values from urls.
         this.stringSlice(tempArr,totalCount)
+        this.setState({
+          ...this.state,
+          loader:false
+        })
         if(this.state.total_count != total_count){
           this.setState({
             total_count: total_count
@@ -83,7 +93,11 @@ class App extends Component{
         <img border="0" alt="Github" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png?resize=149%2C149" width="150" height="150"></img></a>
         <h2><u>Hacktoberfest Excluded Repositories</u></h2>
         <div class="container">
-         {this.state.repoName}
+          {this.state.loader ?
+            <Loader loader={this.state.loader}/>
+            :
+            this.state.repoName
+          }
          {this.hasMore() && <button class="nextPrev" onClick={this.loadMore}>Load More</button>}
         </div>
       </div>
