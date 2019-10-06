@@ -2,6 +2,7 @@
   text-align: right;
 }
 .background{
+  min-height: 100vh;
   text-align: center;
   background-image: url("https://designshack.net/wp-content/uploads/tips-for-using-background-textures-in-web-design.jpg");
   background-size: 100% 100%;

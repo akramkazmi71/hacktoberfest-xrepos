@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './App.css';
+import Loader from './loader/loader'
 
 class App extends Component{
   constructor() {
@@ -7,8 +8,8 @@ class App extends Component{
     this.state = {
       size: 0,
       pageNumber: 1,
-      urlList: []
-
+      urlList: [],
+      loader:false
     };
   }
 
@@ -19,6 +20,10 @@ class App extends Component{
   callPage = (pageNo) => {
     //Fetching data from the API.
     window.scrollTo(0, 0)
+    this.setState({
+      ...this.state,
+      loader:true
+    })
     fetch(`https://api.github.com/search/issues?page=${pageNo}&q=author:hacktoberfest-team`)
       .then(response => {
         return response.json();
@@ -33,7 +38,10 @@ class App extends Component{
         var totalCount=response.items.length
         //Calling stringSlice function to remove junk values from urls.
         this.stringSlice(tempArr,totalCount)
-
+        this.setState({
+          ...this.state,
+          loader:false
+        })
       });
   }
     
@@ -82,16 +90,23 @@ class App extends Component{
   }
 
   render() {
-    
     return(
       <div class="background">
         <a href="https://github.com/akramkazmi71/hacktoberfest-xrepos">
         <img border="0" alt="Github" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png?resize=149%2C149" width="150" height="150"></img></a>
         <h2><u>Hacktoberfest Excluded Repositories</u></h2>
         <div class="container">
-            {this.state.urlList}
+          {this.state.loader ?
+            <Loader/>
+            :
+            this.state.urlList
+          }
           {this.state.pageNumber>1 && <button onClick={this.previousPage}>Previous Page</button>}
-          <button onClick={this.nextPage}>Next Page</button> 
+          {!this.state.loader?
+            <button onClick={this.nextPage}>Next Page</button> 
+            :
+            null
+          }
         </div>
       </div>
     )
