@@ -39,3 +39,7 @@ a{
 a:hover{
   color: red;
 }
+
+img{
+  float:right;
+}
