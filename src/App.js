@@ -72,15 +72,11 @@ class App extends Component{
     })
   }
 
+  hasMore(){
+    return this.state.size < this.state.total_count;
+  }
+
   render() {
-
-    let load_button;
-    if(this.state.size < this.state.total_count){
-      load_button = <button class="nextPrev" onClick={this.loadMore}>Load More</button>;
-    } else {
-      load_button = "";
-    }
-
     return(
       <div class="background">
         <a href="https://github.com/akramkazmi71/hacktoberfest-xrepos">
@@ -88,7 +84,7 @@ class App extends Component{
         <h2><u>Hacktoberfest Excluded Repositories</u></h2>
         <div class="container">
          {this.state.repoName}
-         {load_button}
+         {this.hasMore() && <button class="nextPrev" onClick={this.loadMore}>Load More</button>}
         </div>
       </div>
     )
