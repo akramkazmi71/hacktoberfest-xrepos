@@ -72,7 +72,7 @@ class App extends Component{
     })
   }
 
-  hasMore(){
+  hasMore = () => {
     return this.state.size < this.state.total_count;
   }
 
