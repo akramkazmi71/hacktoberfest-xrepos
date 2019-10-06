@@ -98,9 +98,9 @@ class App extends Component{
             :
             this.state.repoName
           }
-          {this.state.pageNumber>1 && <button onClick={this.previousPage}>Previous Page</button>}
+          {this.state.pageNumber>1 && <button className="nextPrev" onClick={this.previousPage}>Previous Page</button>}
           {!this.state.loader?
-            <button onClick={this.nextPage}>Next Page</button> 
+            <button className="nextPrev" onClick={this.nextPage}>Next Page</button> 
             :
             null
           }
