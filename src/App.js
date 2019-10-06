@@ -9,12 +9,13 @@ class App extends Component{
       pageNumber: 1,
       urlList: [],
       repoName: [],
-      repoUrl: []
+      repoUrl: [],
+      total_count: 0
     };
   }
 
   componentDidMount() {
-    this.callPage(1,10);
+    this.callPage(1,30);
   }
 
   callPage = (pageNo,perPage) => {
@@ -24,6 +25,7 @@ class App extends Component{
         return response.json();
       })
       .then(response => {
+        let total_count = response['total_count'];
         let tempArr=[]
         //Storing the URLs from the API into tempArr[].
         for (var i = 0; i < response.items.length; i++) {
@@ -33,14 +35,18 @@ class App extends Component{
         var totalCount=response.items.length
         //Calling stringSlice function to remove junk values from urls.
         this.stringSlice(tempArr,totalCount)
-
+        if(this.state.total_count != total_count){
+          this.setState({
+            total_count: total_count
+          });
+        }
       });
   }
 
 
   loadMore = () => {
     var incrementPage=this.state.pageNumber+1
-    let perPage = 10;
+    let perPage = 30;
     this.callPage(incrementPage, perPage);
     this.setState({
       pageNumber: incrementPage
@@ -57,7 +63,6 @@ class App extends Component{
       var repName=urlSplit.split("/")
       repo.push(<div class="card"><p key={size+index}><a href={value}>{size+index+1}. {repName[1]}</a></p></div>)
     }
-    console.log("got new urls concatting",urls);
     urlList = urlList.concat(urls);
     repoName = repoName.concat(repo);
     this.setState({
@@ -69,6 +74,13 @@ class App extends Component{
 
   render() {
 
+    let load_button;
+    if(this.state.size < this.state.total_count){
+      load_button = <button class="nextPrev" onClick={this.loadMore}>Load More</button>;
+    } else {
+      load_button = "";
+    }
+
     return(
       <div class="background">
         <a href="https://github.com/akramkazmi71/hacktoberfest-xrepos">
@@ -76,7 +88,7 @@ class App extends Component{
         <h2><u>Hacktoberfest Excluded Repositories</u></h2>
         <div class="container">
          {this.state.repoName}
-          <button class="nextPrev" onClick={this.loadMore}>Load More</button>
+         {load_button}
         </div>
       </div>
     )
