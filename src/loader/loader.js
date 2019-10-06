@@ -1,5 +1,5 @@
 import React from 'react';
-
+import MoonLoader from 'react-spinners/MoonLoader'
 
 const loaderStyles = {
     position: 'fixed',
@@ -8,36 +8,16 @@ const loaderStyles = {
     transform: 'translate(-50%,-50%)',
 }
 
-const loaderTextStyle = {
-    display:'inline-block',
-    color:'#673AB7',
-    fontWeight: '400'
-}
-
-const dotsStyle = {
-    width:'1px',
-    display:'inline-block',
-    color:'#f44336'
-}
-
 const Loader = (props) => {
-    let dots = '.'
-    let maxlen = 4;
-    const [state, setstate] = React.useState('.')
-
-    const dotstimer = setInterval(()=>{
-        setstate(state+dots)
-        if(state.length === maxlen )
-            setstate('.')
-    },500)
-    
-    React.useEffect(() => {
-        return () => clearInterval(dotstimer)
-    })
 
     return (
         <div style={loaderStyles}>
-            <h1 style={loaderTextStyle}>Loading <span style={dotsStyle}>{state}</span></h1>
+            <MoonLoader
+                loading={props.loader} 
+                sizeUnit={"px"}
+                size={100}
+                color={'#f44336'}
+            />
         </div>
     )  
 }

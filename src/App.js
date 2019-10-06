@@ -97,7 +97,7 @@ class App extends Component{
         <h2><u>Hacktoberfest Excluded Repositories</u></h2>
         <div class="container">
           {this.state.loader ?
-            <Loader/>
+            <Loader loader={this.state.loader}/>
             :
             this.state.urlList
           }
