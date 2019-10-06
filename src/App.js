@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './App.css';
+import searchField from 'react-search-field';
 
 class App extends Component{
   constructor() {
@@ -18,6 +19,7 @@ class App extends Component{
 
   callPage = (pageNo) => {
     //Fetching data from the API.
+    window.scrollTo(0, 0)
     fetch(`https://api.github.com/search/issues?page=${pageNo}&q=author:hacktoberfest-team`)
       .then(response => {
         return response.json();
@@ -71,7 +73,7 @@ class App extends Component{
       var url4=url3.replace('api.','www.')
       var final_url=url4.replace('/repos','')
       //Storing valid url into urls[].
-      urls.push(<p key={index}><a href={final_url}>{index+1}.{final_url}</a></p>)
+      urls.push(<p key={index}><a href={final_url}>{index+1}. {final_url}</a></p>)
       urls.sort()
     }
     this.setState({
@@ -84,6 +86,7 @@ class App extends Component{
     
     return(
       <div>
+        <h2><u>Hacktoberfest Excluded Repositories</u></h2>
         {this.state.urlList}  
         {this.state.pageNumber>1 && <button onClick={this.previousPage}>Previous Page</button>}
         <button onClick={this.nextPage}>Next Page</button> 
