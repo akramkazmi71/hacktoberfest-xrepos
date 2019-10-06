@@ -9,24 +9,24 @@ class App extends Component{
       pageNumber: 1,
       urlList: [],
       repoName: [],
-      repoUrl: []
-
+      repoUrl: [],
+      total_count: 0
     };
   }
 
   componentDidMount() {
-    this.callPage(1);
+    this.callPage(1,30);
   }
 
-  callPage = (pageNo) => {
+  callPage = (pageNo,perPage) => {
     //Fetching data from the API.
-    window.scrollTo(0, 0)
-    fetch(`https://api.github.com/search/issues?page=${pageNo}&q=author:hacktoberfest-team`)
+    fetch(`https://api.github.com/search/issues?page=${pageNo}&per_page=${perPage}&q=author:hacktoberfest-team`)
       .then(response => {
         return response.json();
       })
       .then(response => {
-        let tempArr=[]  
+        let total_count = response['total_count'];
+        let tempArr=[]
         //Storing the URLs from the API into tempArr[].
         for (var i = 0; i < response.items.length; i++) {
           tempArr.push(response.items[i].html_url+"\n")
@@ -35,51 +35,48 @@ class App extends Component{
         var totalCount=response.items.length
         //Calling stringSlice function to remove junk values from urls.
         this.stringSlice(tempArr,totalCount)
-
+        if(this.state.total_count != total_count){
+          this.setState({
+            total_count: total_count
+          });
+        }
       });
   }
-    
-  nextPage = () => {
-    var x=this.state.size/30
-    //Finding maximum number of pages that are formed.
-    var maxPage=Math.floor(x)+1
-    if(this.state.pageNumber<=maxPage){
-      var incrementPage=this.state.pageNumber+1
-      //Going to next page.
-      this.callPage(incrementPage);
-      this.setState({
-        pageNumber: incrementPage
-      })
-    }
-  }
 
-  previousPage = () => {
-    var prevPage=this.state.pageNumber-1
-    //Going to previous page.
-    this.callPage(prevPage);
+
+  loadMore = () => {
+    var incrementPage=this.state.pageNumber+1
+    let perPage = 30;
+    this.callPage(incrementPage, perPage);
     this.setState({
-      pageNumber: prevPage
-    })
+      pageNumber: incrementPage
+    });
   }
 
   stringSlice = (tempArr,totalCount) => {
     const urls=[]
     const repo=[]
+    let {urlList, repoName, size} = this.state;
     for (const [index, value] of tempArr.entries()){
       urls.push(value)
       let urlSplit=value.replace(/https:\/\/github.com\/|\/issues\/[0-9]+/g,'')
       var repName=urlSplit.split("/")
-      repo.push(<div class="card"><p key={index}><a href={value}>{index+1}. {repName[1]}</a></p></div>)
+      repo.push(<div class="card"><p key={size+index}><a href={value}>{size+index+1}. {repName[1]}</a></p></div>)
     }
+    urlList = urlList.concat(urls);
+    repoName = repoName.concat(repo);
     this.setState({
-      urlList: urls,
-      size: totalCount,
-      repoName: repo
+      urlList: urlList,
+      size: size+totalCount,
+      repoName: repoName
     })
   }
 
+  hasMore = () => {
+    return this.state.size < this.state.total_count;
+  }
+
   render() {
-    
     return(
       <div class="background">
         <a href="https://github.com/akramkazmi71/hacktoberfest-xrepos">
@@ -87,8 +84,7 @@ class App extends Component{
         <h2><u>Hacktoberfest Excluded Repositories</u></h2>
         <div class="container">
          {this.state.repoName}
-          {this.state.pageNumber>1 && <button class="nextPrev" onClick={this.previousPage}>Previous Page</button>}
-          <button class="nextPrev" onClick={this.nextPage}>Next Page</button> 
+         {this.hasMore() && <button class="nextPrev" onClick={this.loadMore}>Load More</button>}
         </div>
       </div>
     )
