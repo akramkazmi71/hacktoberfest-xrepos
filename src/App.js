@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import './App.css';
-import searchField from 'react-search-field';
 
 class App extends Component{
   constructor() {
@@ -86,6 +85,8 @@ class App extends Component{
     
     return(
       <div>
+        <a href="https://github.com/akramkazmi71/hacktoberfest-xrepos">
+        <img border="0" alt="Github" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png?resize=149%2C149" width="150" height="150"></img></a>
         <h2><u>Hacktoberfest Excluded Repositories</u></h2>
         {this.state.urlList}  
         {this.state.pageNumber>1 && <button onClick={this.previousPage}>Previous Page</button>}
@@ -96,3 +97,4 @@ class App extends Component{
 }
 
 export default App;
+
