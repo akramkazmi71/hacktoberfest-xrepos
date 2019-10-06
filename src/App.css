@@ -1,22 +1,41 @@
 .App {
+  text-align: right;
+}
+div{
   text-align: center;
+  background-image: url("https://st2.depositphotos.com/3503231/7703/v/950/depositphotos_77039349-stock-illustration-blue-white-polygonal-mosaic-background.jpg");
+  background-size: 100% 100%;
 }
 
-.App-logo {
-  height: 40vmin;
+h2{
+  color: red;
+  padding-top: 10px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+p{
+  text-align: left;
+  padding-top:5px;
+  padding-bottom:5px;
+  padding-left:20px;
+}
+button{
+  margin-bottom:20px;
+  margin-right: 5px;
+  margin-left: 5px;
+  font-size: 18px;
+  border-radius: 8px;
+  background-color: blue;
+  border: 2px solid lightgreen;
+  transition-duration: 0.4ms;
 }
 
-.App-link {
-  color: #09d3ac;
+button:hover{
+  background-color: lightgreen; 
+}
+
+a{
+  color: black;
+}
+a:hover{
+  color: red;
 }
