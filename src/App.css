@@ -64,3 +64,17 @@ img{
   padding-left: 16px;
   padding-right: 25%;
 }
+
+.repoIssue{
+  margin-bottom:20px;
+  margin-right: 5px;
+  margin-left: 5px;
+  font-size: 18px;
+  border-radius: 8px;
+  background-color: orange;
+  transition-duration: 0.4ms;
+}
+
+.repoIssue:hover{
+  color: black;
+}
