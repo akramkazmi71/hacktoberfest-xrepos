@@ -12,8 +12,10 @@ class App extends Component{
       loader:false,
       repoName: [],
       repoUrl: [],
-      total_count: 0
+      total_count: 0,
+      searchTerm: ""
     };
+    this.searchRepo = this.searchRepo.bind(this)
   }
 
   componentDidMount() {
@@ -34,6 +36,7 @@ class App extends Component{
         let total_count = response['total_count'];
         let tempArr=[]
         //Storing the URLs from the API into tempArr[].
+        if(response.items){
         for (var i = 0; i < response.items.length; i++) {
           tempArr.push(response.items[i].html_url+"\n")
         }
@@ -50,6 +53,7 @@ class App extends Component{
             total_count: total_count
           });
         }
+      }
       });
   }
 
@@ -86,6 +90,52 @@ class App extends Component{
     return this.state.size < this.state.total_count;
   }
 
+  searchRepo = (event) => {
+    this.setState({
+      searchTerm: event.target.value,
+      loader:true,
+      repoName: [],
+      urlList: [],
+      repoUrl: [],
+      totalCount: 0
+    })
+    console.log()
+    if( this.state.searchTerm === 0 ){
+      this.callPage(1, 30)
+    }
+    else {
+      window.scrollTo(0, 0)
+      var totalCount=0
+      fetch("https://api.github.com/search/issues?q="+this.state.searchTerm)
+      .then(response => {
+        return response.json();
+      })
+      .then(response => {
+        let total_count = response['total_count'];
+        let tempArr=[]
+        if(response.items){
+          //Storing the URLs from the API into tempArr[].
+          for (var i = 0; i < response.items.length; i++) {
+            tempArr.push(response.items[i].html_url+"\n")
+          }
+          //Storing total number of entries into totalCount.
+          totalCount=response.items.length
+          //Calling stringSlice function to remove junk values from urls.
+          this.stringSlice(tempArr,totalCount)
+        }
+          this.setState({
+            ...this.state,
+            loader:false
+          })
+          if(this.state.total_count !== total_count){
+            this.setState({
+              total_count: total_count
+            });
+          }
+      });
+    }
+  }
+
   render() {
     return(
       <div class="background">
@@ -93,6 +143,13 @@ class App extends Component{
         <img border="0" alt="Github" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png?resize=149%2C149" width="150" height="150"></img></a>
         <h2><u>Hacktoberfest Excluded Repositories</u></h2>
         <div class="container">
+        <input 
+          name= "searchTerm"
+          type="text" 
+          placeholder="Search"
+          value= { this.state.searchTerm }
+          onChange= { this.searchRepo }  
+          />
           {this.state.loader ?
             <Loader loader={this.state.loader}/>
             :
