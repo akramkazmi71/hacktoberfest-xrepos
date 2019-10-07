@@ -12,8 +12,10 @@ class App extends Component{
       loader:false,
       repoName: [],
       repoUrl: [],
-      total_count: 0
+      total_count: 0,
+      searchTerm: ""
     };
+    this.handleChange = this.handleChange.bind(this)
   }
 
   componentDidMount() {
@@ -26,7 +28,14 @@ class App extends Component{
       ...this.state,
       loader:true
     })
-    fetch(`https://api.github.com/search/issues?page=${pageNo}&per_page=${perPage}&q=author:hacktoberfest-team`)
+    let searchUrl = ""
+    if(this.state.searchTerm.length === 0){
+      searchUrl = `https://api.github.com/search/issues?page=${pageNo}&per_page=${perPage}&q=author:hacktoberfest-team`
+    }
+    else{
+      searchUrl = `https://api.github.com/search/issues?page=${pageNo}&per_page=${perPage}&q=${this.state.searchTerm}&author:hacktoberfest-team`
+    }
+    fetch(searchUrl)
       .then(response => {
         return response.json();
       })
@@ -34,6 +43,7 @@ class App extends Component{
         let total_count = response['total_count'];
         let tempArr=[]
         //Storing the URLs from the API into tempArr[].
+        if(response.items){
         for (var i = 0; i < response.items.length; i++) {
           tempArr.push(response.items[i].html_url+"\n")
         }
@@ -50,6 +60,7 @@ class App extends Component{
             total_count: total_count
           });
         }
+      }
       });
   }
 
@@ -86,6 +97,19 @@ class App extends Component{
     return this.state.size < this.state.total_count;
   }
 
+  handleChange = (event) => {
+    this.setState({ 
+      searchTerm: event.target.value,
+      loader:true,
+      repoName: [],
+      urlList: [],
+      repoUrl: [],
+      totalCount: 0,
+      size: 0
+    }, () => {
+      this.callPage(1, 30)
+    });
+  }
   render() {
     return(
       <div class="background">
@@ -93,6 +117,13 @@ class App extends Component{
         <img border="0" alt="Github" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png?resize=149%2C149" width="150" height="150"></img></a>
         <h2><u>Hacktoberfest Excluded Repositories</u></h2>
         <div class="container">
+        <input 
+          name= "searchTerm"
+          type="text" 
+          placeholder="Search"
+          value= { this.state.searchTerm }
+          onChange= { this.handleChange }  
+          />
           {this.state.loader ?
             <Loader loader={this.state.loader}/>
             :
