@@ -70,25 +70,25 @@ class App extends Component{
         let data = tempArr.concat(this.state.urlList).reduce(function(result, value, index){
             var repName = me.extractRepName(value);
             var repAddress = me.extractRepAdress(value);
-            result[repName] = {
+            result.push({
+                "repName": repName,
                 "url": value,
                 "repAddress": repAddress
-            };
+            });
 
             return result;
-        }, {});
+        }, []);
 
-        Object.keys(data).sort(function(a, b){
-            return a.localeCompare(b);   
-        }).forEach(function(repName, index){
-            var obj = data[repName];
+        data.sort(function(a, b){
+            return a.repName.localeCompare(b.repName);   
+        }).forEach(function(obj, index){
             urls.push(obj.url);
-            repo.push(me.createRepoDiv(index, obj.url, repName, obj.repAddress));
+            repo.push(me.createRepoDiv(index, obj.url, obj.repName, obj.repAddress));
         });
 
         this.setState({
             urlList: urls,
-            size: Object.keys(data).length,
+            size: data.length,
             repoName: repo
         })
     }
@@ -97,7 +97,7 @@ class App extends Component{
         return this.state.size < this.state.total_count;
     }
     createRepoDiv = (index, value, repName, repAddress) => {
-        return <div class="card"><p key={size+index}>{size+index+1}.{repName}</p>
+        return <div class="card"><p key={index}>{index+1}.{repName}</p>
                   <button class="repoIssue"><a href={value}>Issue</a></button>
                   <button class="repoIssue"><a href={repAddress}>Repository</a></button>
                 </div>;
