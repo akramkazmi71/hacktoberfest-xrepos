@@ -71,7 +71,11 @@ class App extends Component{
       urls.push(value)
       let urlSplit=value.replace(/https:\/\/github.com\/|\/issues\/[0-9]+/g,'')
       var repName=urlSplit.split("/")
-      repo.push(<div class="card"><p key={size+index}><a href={value}>{size+index+1}. {repName[1]}</a></p></div>)
+      var repAddress="https://github.com/"+urlSplit
+      repo.push(<div class="card"><p key={size+index}>{size+index+1}.{repName[1]}</p>
+                  <button class="repoIssue"><a href={value}>Issue</a></button>
+                  <button class="repoIssue"><a href={repAddress}>Repository</a></button>
+                </div>)
     }
     urlList = urlList.concat(urls);
     repoName = repoName.concat(repo);
