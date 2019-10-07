@@ -15,7 +15,7 @@ class App extends Component{
       total_count: 0,
       searchTerm: ""
     };
-    this.searchRepo = this.searchRepo.bind(this)
+    this.handleChange = this.handleChange.bind(this)
   }
 
   componentDidMount() {
@@ -28,7 +28,14 @@ class App extends Component{
       ...this.state,
       loader:true
     })
-    fetch(`https://api.github.com/search/issues?page=${pageNo}&per_page=${perPage}&q=author:hacktoberfest-team`)
+    let searchUrl = ""
+    if(this.state.searchTerm.length === 0){
+      searchUrl = `https://api.github.com/search/issues?page=${pageNo}&per_page=${perPage}&q=author:hacktoberfest-team`
+    }
+    else{
+      searchUrl = `https://api.github.com/search/issues?page=${pageNo}&per_page=${perPage}&q=${this.state.searchTerm}&author:hacktoberfest-team`
+    }
+    fetch(searchUrl)
       .then(response => {
         return response.json();
       })
@@ -90,52 +97,19 @@ class App extends Component{
     return this.state.size < this.state.total_count;
   }
 
-  searchRepo = (event) => {
-    this.setState({
+  handleChange = (event) => {
+    this.setState({ 
       searchTerm: event.target.value,
       loader:true,
       repoName: [],
       urlList: [],
       repoUrl: [],
-      totalCount: 0
-    })
-    console.log()
-    if( this.state.searchTerm === 0 ){
+      totalCount: 0,
+      size: 0
+    }, () => {
       this.callPage(1, 30)
-    }
-    else {
-      window.scrollTo(0, 0)
-      var totalCount=0
-      fetch("https://api.github.com/search/issues?q="+this.state.searchTerm)
-      .then(response => {
-        return response.json();
-      })
-      .then(response => {
-        let total_count = response['total_count'];
-        let tempArr=[]
-        if(response.items){
-          //Storing the URLs from the API into tempArr[].
-          for (var i = 0; i < response.items.length; i++) {
-            tempArr.push(response.items[i].html_url+"\n")
-          }
-          //Storing total number of entries into totalCount.
-          totalCount=response.items.length
-          //Calling stringSlice function to remove junk values from urls.
-          this.stringSlice(tempArr,totalCount)
-        }
-          this.setState({
-            ...this.state,
-            loader:false
-          })
-          if(this.state.total_count !== total_count){
-            this.setState({
-              total_count: total_count
-            });
-          }
-      });
-    }
+    });
   }
-
   render() {
     return(
       <div class="background">
@@ -148,7 +122,7 @@ class App extends Component{
           type="text" 
           placeholder="Search"
           value= { this.state.searchTerm }
-          onChange= { this.searchRepo }  
+          onChange= { this.handleChange }  
           />
           {this.state.loader ?
             <Loader loader={this.state.loader}/>
