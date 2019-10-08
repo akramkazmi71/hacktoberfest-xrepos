@@ -96,9 +96,6 @@ class App extends Component {
 		});
 	};
 
-	hasMore = () => {
-		return this.state.size < this.state.total_count;
-	};
 
 	render() {
 		return (
@@ -123,6 +120,56 @@ class App extends Component {
 							this.state.repoName
 						)}
 					</div>
+
+    stringSlice = (tempArr,totalCount) => {
+        const me = this;
+        const urls=[]
+        const repo=[]
+        let data = tempArr.concat(this.state.urlList).reduce(function(result, value, index){
+            var repName = me.extractRepName(value);
+            var repAddress = me.extractRepAdress(value);
+            result.push({
+                "repName": repName,
+                "url": value,
+                "repAddress": repAddress
+            });
+
+            return result;
+        }, []);
+
+        data.sort(function(a, b){
+            return a.repName.localeCompare(b.repName);   
+        }).forEach(function(obj, index){
+            urls.push(obj.url);
+            repo.push(me.createRepoDiv(index, obj.url, obj.repName, obj.repAddress));
+        });
+
+        this.setState({
+            urlList: urls,
+            size: data.length,
+            repoName: repo
+        })
+    }
+
+    hasMore = () => {
+        return this.state.size < this.state.total_count;
+    }
+    createRepoDiv = (index, value, repName, repAddress) => {
+        return <div class="card"><p key={index}>{index+1}.{repName}</p>
+                  <button class="repoIssue"><a href={value}>Issue</a></button>
+                  <button class="repoIssue"><a href={repAddress}>Repository</a></button>
+                </div>;
+    }
+
+    extractRepName = (value)  => {
+        let repName = (value.replace(/https:\/\/github.com\/|\/issues\/[0-9]+/g,'')).split("/");
+        return repName.length === 2 ? repName[1] : repName[0];
+    }
+
+    extractRepAdress = (value) => {
+        let urlSplit=value.replace(/https:\/\/github.com\/|\/issues\/[0-9]+/g,'');
+        return "https://github.com/"+urlSplit;
+    }
 
 					{!this.state.loader && (
 						<footer className="footer">
