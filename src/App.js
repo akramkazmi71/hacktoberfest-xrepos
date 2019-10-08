@@ -124,13 +124,15 @@ class App extends Component {
 					)}
 				</div>
 
-				<footer className="footer">
-					{this.state.loader && this.hasMore() && (
-						<button className="nextPrev" onClick={this.loadMore}>
-							Load More
-						</button>
-					)}
-				</footer>
+				{!this.state.loader && (
+					<footer className="footer">
+						{this.hasMore() && (
+							<button className="nextPrev" onClick={this.loadMore}>
+								Load More
+							</button>
+						)}
+					</footer>
+				)}
 			</>
 		);
 	}
