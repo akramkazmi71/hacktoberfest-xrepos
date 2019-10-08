@@ -102,39 +102,39 @@ class App extends Component {
 
 	render() {
 		return (
-			<>
-				<a
-					href="https://github.com/akramkazmi71/hacktoberfest-xrepos"
-					className="forkLink"
-				>
-					<img
-						border="0"
-						alt="Github"
-						src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png?resize=149%2C149"
-						width="150"
-						height="150"
-					></img>
-				</a>
-				<h2>Hacktoberfest Excluded Repositories</h2>
-				<div className="container">
-					{this.state.loader ? (
-						<Loader loader={this.state.loader} />
-					) : (
-						this.state.repoName
-					)}
-				</div>
-
-				{!this.state.loader && (
-					<footer className="footer">
-						{this.hasMore() && (
-							<button className="nextPrev" onClick={this.loadMore}>
-								Load More
-							</button>
+				<>
+					<a
+						href="https://github.com/akramkazmi71/hacktoberfest-xrepos"
+						className="forkLink"
+					>
+						<img
+							border="0"
+							alt="Github"
+							src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png?resize=149%2C149"
+							width="150"
+							height="150"
+						/>
+					</a>
+					<h2>Hacktoberfest Excluded Repositories</h2>
+					<div className="container">
+						{this.state.loader ? (
+							<Loader loader={this.state.loader} />
+						) : (
+							this.state.repoName
 						)}
-					</footer>
-				)}
-			</>
-		);
+					</div>
+
+					{!this.state.loader && (
+						<footer className="footer">
+							{this.hasMore() && (
+								<button className="nextPrev" onClick={this.loadMore}>
+									Load More
+								</button>
+							)}
+						</footer>
+					)}
+				</>
+			);
 	}
 }
 
