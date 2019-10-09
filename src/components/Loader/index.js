@@ -1,25 +1,26 @@
 import React from 'react';
-import MoonLoader from 'react-spinners/MoonLoader'
+import MoonLoader from 'react-spinners/BeatLoader'
 
 const loaderStyles = {
-    position: 'fixed',
-    top:'50%',
-    left: '50%',
-    transform: 'translate(-50%,-50%)',
+  position: 'relative',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  marginTop: '10px',
+  marginBottom: '10px'
 }
 
 const Loader = (props) => {
 
-    return (
-        <div style={loaderStyles}>
-            <MoonLoader
-                loading={props.loader} 
-                sizeUnit={"px"}
-                size={100}
-                color={'#f44336'}
-            />
-        </div>
-    )  
+  return (
+    <div style={loaderStyles}>
+      <MoonLoader
+        loading={props.loader}
+        sizeUnit={"px"}
+        size={15}
+        color={'#a11ec6'}
+      />
+    </div>
+  )
 }
 
 export default Loader;
