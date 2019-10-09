@@ -1,0 +1,40 @@
+.card {
+	width: 200px;
+	height: 225px;
+	margin-bottom: 10px;
+	border-radius: 5px;
+	background-color: #fff;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
+.card-number {
+	font-weight: bold;
+	font-size: 2rem;
+	color: #5080ff;
+}
+
+.card .btn {
+	width: 100px;
+	padding: 5px;
+	display: block;
+	margin-top: 10px;
+	text-align: center;
+	color: #fff;
+	text-decoration: none;
+	background-color: #a11ec6;
+	border-radius: 3px;
+	transition: all 0.2s;
+}
+
+.card .btn:hover {
+	transform: scale(1.05);
+}
+
+h3 {
+overflow-wrap: break-word;
+width: 100%;
+}
