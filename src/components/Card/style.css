@@ -3,12 +3,13 @@
 	height: 225px;
 	margin-bottom: 10px;
 	border-radius: 5px;
-	background-color: #fff;
+	background-color: #282828;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	text-align: center;
+	color: white;
 }
 
 .card-number {
